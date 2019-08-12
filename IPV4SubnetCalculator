@@ -1,0 +1,59 @@
+def IOC(x,y): #important octet calculator, x is number of network digits, y is the octet
+	z = 0	#z is the network portion of the interesting octet
+	for i in range(x):
+		subExp = 7-i
+		bitTested = 2**subExp
+		if (y >= bitTested):
+			y = y - bitTested
+			z = z + bitTested			
+	return z;
+
+firstOctet = int(input('enter the first octet: '))
+secondOctet = int(input('enter the second octet: '))
+thirdOctet = int(input('enter the third octet: '))
+fourthOctet =int(input('enter the fourth octet: '))
+subnetMask = int(input('and the subnet mask: '))
+print(firstOctet,'.',secondOctet,'.',thirdOctet,'.',fourthOctet, '/',subnetMask)
+
+netBitsInIO = subnetMask%8
+
+if (subnetMask < 8):
+	ION = firstOctet
+	IO=1
+elif (subnetMask < 16):
+	ION = secondOctet
+	IO=2
+elif (subnetMask < 24):
+	ION = thirdOctet
+	IO=3
+else:
+	ION = fourthOctet
+	IO=4
+
+NetIO=IOC(netBitsInIO,ION)
+
+G=0
+for i in range (8 - netBitsInIO):
+	G += 2**i
+IOT = NetIO + G
+
+if (IO == 1):
+	print('Your network address is ' + str(NetIO) + ' . 0 . 0 . 0')
+	print('Your first host address is ' + str(NetIO) + ' . 0 . 0 . 1')
+	print('Your last host address is ' + str(IOT) + ' . 255 . 255 . 254')
+	print('Your broadcast address is ' + str(IOT) + ' . 255 . 255 . 255')
+elif (IO == 2):
+	print('Your network address is ' + str(firstOctet) + ' . ' + str(NetIO) + ' . 0 . 0')
+	print('Your first host address is ' + str(firstOctet) + ' . ' + str(NetIO) + ' . 0 . 1')
+	print('Your last host address is ' + str(firstOctet) + ' . ' + str(IOT) + ' . 255 . 254')
+	print('Your broadcast address is ' + str(firstOctet) + ' . ' + str(IOT) + ' . 255 . 255')
+elif (IO == 3):
+	print('Your network address is ' + str(firstOctet) + ' . ' + str(secondOctet) + ' . ' + str(NetIO) + '. 0')
+	print('Your first address is ' + str(firstOctet) + ' . ' + str(secondOctet) + ' . ' + str(NetIO) + '. 1')
+	print('Your last address is ' + str(firstOctet) + ' . ' + str(secondOctet) + ' . ' + str(IOT) + '. 254')
+	print('Your broadcast address is ' + str(firstOctet) + ' . ' + str(secondOctet) + ' . ' + str(IOT) + '. 255')
+elif (IO == 4):
+	print('Your network address is ' + str(firstOctet) + ' . ' + str(secondOctet) + ' . ' + str(thirdOctet) + ' . ' + str(NetIO))
+	print('Your first host address is ' + str(firstOctet) + ' . ' + str(secondOctet) + ' . ' + str(thirdOctet) + ' . ' + str(NetIO+1))
+	print('Your last host address is ' + str(firstOctet) + ' . ' + str(secondOctet) + ' . ' + str(thirdOctet) + ' . ' + str(IOT-1))
+	print('Your broadcast address is ' + str(firstOctet) + ' . ' + str(secondOctet) + ' . ' + str(thirdOctet) + ' . ' + str(IOT))
